@@ -6,7 +6,7 @@ export const Button = styled.button<{ buttonType: 'primary' | 'secondary' }>`
   border: none;
   cursor: pointer;
   padding: 16px 40px;
-  border-radius: 16px;
+  border-radius: 8px;
 
   background-color: ${(p) =>
     p.buttonType === 'primary'
@@ -15,7 +15,7 @@ export const Button = styled.button<{ buttonType: 'primary' | 'secondary' }>`
       ? p.theme.colors.secondary
       : null};
 
-  border: 2px solid
+  border: 2px dashed
     ${(p) =>
       p.buttonType === 'primary'
         ? p.theme.colors.primaryAcc
