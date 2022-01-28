@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { Toaster, toast } from 'react-hot-toast';
 import Button from './components/Button';
 import EmojiGrid from './components/EmojiGrid';
 import EmojiPicker from './components/EmojiPicker';
+
 import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
+
 import { Grid } from './types';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
         <Main />
+        <Footer />
         <GlobalStyle />
+        <Toaster position="bottom-center" />
       </ThemeProvider>
     </>
   );
@@ -37,7 +43,20 @@ const Main = () => {
 
   const copyGrid = () => {
     const gridString = grid.map((row) => row.join('')).join('\n');
-    navigator.clipboard.writeText(gridString);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(gridString).then(() => {
+        toast('Go out and paste your masterpiece into the world!', {
+          icon: '🎨',
+          style: {
+            fontSize: '16px',
+            fontWeight: '700',
+            border: '2px dashed black',
+          },
+        });
+      });
+    } else {
+      toast.error('couldnt access clipbaord');
+    }
   };
 
   return (
