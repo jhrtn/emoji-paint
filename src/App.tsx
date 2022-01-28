@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { Toaster, toast } from 'react-hot-toast';
 import Button from './components/Button';
@@ -10,8 +10,11 @@ import theme from './styles/theme';
 
 import { Grid } from './types';
 import Footer from './components/Footer';
+import useHitCount from './utils/useHitCount';
 
 const App = () => {
+  const { addHit } = useHitCount();
+  useEffect(() => addHit(), []);
   return (
     <>
       <ThemeProvider theme={theme}>

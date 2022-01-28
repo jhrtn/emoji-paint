@@ -1,5 +1,8 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { emojis } from '../types';
+
+import { Emoji, emojis } from '../types';
+import { useLongPress } from '../utils/useLongPress';
 
 interface EmojiPickerProps {
   currentEmoji: string;
@@ -14,12 +17,21 @@ const EmojiPicker = ({
   secondaryEmoji,
   setSecondaryEmoji,
 }: EmojiPickerProps) => {
+  const currentCol = useRef<Emoji | null>(null);
+  const bind = useLongPress(() => {
+    if (currentCol.current) {
+      const { raw } = currentCol.current;
+      handleClick('right', raw);
+    }
+  });
+
   const handleClick = (side: 'right' | 'left', emoji: string) => {
     if (side === 'left') {
       setCurrentEmoji(emoji);
     } else if (side === 'right') {
       setSecondaryEmoji(emoji);
     }
+    currentCol.current = null;
   };
 
   return (
@@ -28,8 +40,13 @@ const EmojiPicker = ({
         {emojis.map((emoji) => (
           <Tile
             key={emoji.color}
+            {...bind}
             onClick={() => handleClick('left', emoji.raw)}
             onAuxClick={() => handleClick('right', emoji.raw)}
+            onTouchStart={(e) => {
+              currentCol.current = emoji;
+              return bind.onTouchStart(e);
+            }}
           >
             {emoji.raw}
           </Tile>
@@ -55,14 +72,11 @@ const Tile = styled.span`
   cursor: pointer;
   user-select: none;
   font-size: 32px;
-
-  /* border: 1px solid black; */
 `;
 
 const Palette = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  /* grid-template-rows: 1fr 1fr; */
 `;
 
 const CurrentCols = styled.div`
