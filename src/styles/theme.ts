@@ -4,9 +4,9 @@ const theme: DefaultTheme = {
   colors: {
     fg: '#1C0404',
     bg: '#FFF6F6',
-    primary: '#D0F9D1',
+    primary: '#EFFFF0',
     primaryAcc: '#ABDCAD',
-    secondary: '#F9D0D2',
+    secondary: '#FFEFF0',
     secondaryAcc: '#DCABAE',
   },
 };
