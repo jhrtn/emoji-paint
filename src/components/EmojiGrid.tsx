@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import styled from 'styled-components';
-import { toast } from 'react-hot-toast';
 
 import { useLongPress } from '../utils/useLongPress';
 import { Grid } from '../types';
