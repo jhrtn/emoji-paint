@@ -41,10 +41,12 @@ const Main = () => {
   const [grid, setGrid] = useState(createGrid);
   const [currEmoji, setCurrEmoji] = useState('🟩');
   const [bgEmoji, setBgEmoji] = useState('⬛️');
+  const { addCopy } = useHitCount();
 
   const clearGrid = () => setGrid(createGrid);
 
   const copyGrid = () => {
+    addCopy();
     const gridString = grid.map((row) => row.join('')).join('\n');
     if (navigator.clipboard) {
       navigator.clipboard.writeText(gridString).then(() => {

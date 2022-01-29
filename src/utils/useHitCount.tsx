@@ -1,6 +1,6 @@
 import { updateDoc, doc, increment } from 'firebase/firestore/lite';
 import { db } from './firebase';
-const useHitCount = (): { addHit: () => void } => {
+const useHitCount = (): { addHit: () => void; addCopy: () => void } => {
   const addHit = () => {
     const docRef = doc(db, 'data/analytics');
     updateDoc(docRef, {
@@ -8,7 +8,14 @@ const useHitCount = (): { addHit: () => void } => {
     });
   };
 
-  return { addHit };
+  const addCopy = () => {
+    const docRef = doc(db, 'data/analytics');
+    updateDoc(docRef, {
+      copies: increment(1),
+    });
+  };
+
+  return { addHit, addCopy };
 };
 
 export default useHitCount;
