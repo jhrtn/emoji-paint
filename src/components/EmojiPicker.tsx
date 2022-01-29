@@ -1,7 +1,6 @@
-import { useRef } from 'react';
 import styled from 'styled-components';
 
-import { Emoji, emojis } from '../types';
+import { emojis } from '../types';
 import EmojiTile, { Tile } from './EmojiTile';
 
 interface EmojiPickerProps {
@@ -17,15 +16,12 @@ const EmojiPicker = ({
   secondaryEmoji,
   setSecondaryEmoji,
 }: EmojiPickerProps) => {
-  const currentCol = useRef<Emoji | null>(null);
-
   const handleClick = (side: 'right' | 'left', emoji: string) => {
     if (side === 'left') {
       setCurrentEmoji(emoji);
     } else if (side === 'right') {
       setSecondaryEmoji(emoji);
     }
-    currentCol.current = null;
   };
 
   return (

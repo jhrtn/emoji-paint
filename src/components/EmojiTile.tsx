@@ -38,7 +38,7 @@ const EmojiTile = ({
     <Tile
       style={{ ...style }}
       {...bind}
-      onMouseDown={() => primaryInput === 'mouse' && onLeftClick(data)}
+      onClick={() => primaryInput === 'mouse' && onLeftClick(data)}
       onContextMenu={() => primaryInput === 'mouse' && onRightClick(data)}
     >
       {children}
