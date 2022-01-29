@@ -1,8 +1,7 @@
-import { useRef } from 'react';
 import styled from 'styled-components';
 
-import { useLongPress } from '../utils/useLongPress';
 import { Grid } from '../types';
+import EmojiTile from './EmojiTile';
 
 interface EmojiGridProps {
   currentEmoji: string;
@@ -11,7 +10,7 @@ interface EmojiGridProps {
   setGrid: (g: Grid) => void;
 }
 
-type Pos = [number, number];
+export type Pos = [number, number];
 
 const EmojiGrid = ({
   currentEmoji,
@@ -19,20 +18,11 @@ const EmojiGrid = ({
   grid,
   setGrid,
 }: EmojiGridProps) => {
-  const bind = useLongPress(() => {
-    if (currentPos.current) {
-      const [x, y] = currentPos.current;
-      handleClick('right', x, y);
-    }
-  });
-  const currentPos = useRef<Pos | null>(null);
-
   const handleClick = (
     e: 'right' | 'left',
     rowIndex: number,
     colIndex: number
   ) => {
-    console.log('block', rowIndex, colIndex, 'clicked');
     const gridCopy = [...grid];
     gridCopy[rowIndex][colIndex] = e === 'left' ? currentEmoji : secondaryEmoji;
     setGrid(gridCopy);
@@ -43,18 +33,15 @@ const EmojiGrid = ({
       {grid.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((block, colIndex) => (
-            <Tile
-              {...bind}
+            <EmojiTile
               key={`${block}${colIndex}`}
-              onClick={() => handleClick('left', rowIndex, colIndex)}
-              onAuxClick={() => handleClick('right', rowIndex, colIndex)}
-              onTouchStart={(e) => {
-                currentPos.current = [rowIndex, colIndex];
-                return bind.onTouchStart(e);
-              }}
+              onLeftClick={([x, y]) => handleClick('left', x, y)}
+              onRightClick={([x, y]) => handleClick('right', x, y)}
+              onLongPress={([x, y]) => handleClick('right', x, y)}
+              data={[rowIndex, colIndex]}
             >
               {block}
-            </Tile>
+            </EmojiTile>
           ))}
         </Row>
       ))}
@@ -64,17 +51,8 @@ const EmojiGrid = ({
 
 export default EmojiGrid;
 
-const Container = styled.div`
-  /* width: 100%; */
-  /* height: 100%; */
-`;
+const Container = styled.div``;
 
 const Row = styled.div`
   display: flex;
-`;
-
-const Tile = styled.span`
-  cursor: pointer;
-  user-select: none;
-  font-size: 36px;
 `;

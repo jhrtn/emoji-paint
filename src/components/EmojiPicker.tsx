@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 import { Emoji, emojis } from '../types';
-import { useLongPress } from '../utils/useLongPress';
+import EmojiTile, { Tile } from './EmojiTile';
 
 interface EmojiPickerProps {
   currentEmoji: string;
@@ -18,12 +18,6 @@ const EmojiPicker = ({
   setSecondaryEmoji,
 }: EmojiPickerProps) => {
   const currentCol = useRef<Emoji | null>(null);
-  const bind = useLongPress(() => {
-    if (currentCol.current) {
-      const { raw } = currentCol.current;
-      handleClick('right', raw);
-    }
-  });
 
   const handleClick = (side: 'right' | 'left', emoji: string) => {
     if (side === 'left') {
@@ -38,18 +32,15 @@ const EmojiPicker = ({
     <Container>
       <Palette>
         {emojis.map((emoji) => (
-          <Tile
+          <EmojiTile
+            onLeftClick={(d) => handleClick('left', d)}
+            onRightClick={(d) => handleClick('right', d)}
+            onLongPress={(d) => handleClick('right', d)}
             key={emoji.color}
-            {...bind}
-            onClick={() => handleClick('left', emoji.raw)}
-            onAuxClick={() => handleClick('right', emoji.raw)}
-            onTouchStart={(e) => {
-              currentCol.current = emoji;
-              return bind.onTouchStart(e);
-            }}
+            data={emoji.raw}
           >
             {emoji.raw}
-          </Tile>
+          </EmojiTile>
         ))}
       </Palette>
       <CurrentCols>
@@ -66,12 +57,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 32px;
-`;
-
-const Tile = styled.span`
-  cursor: pointer;
-  user-select: none;
-  font-size: 32px;
 `;
 
 const Palette = styled.div`
